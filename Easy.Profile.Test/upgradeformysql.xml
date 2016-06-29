@@ -1,0 +1,1240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DBUpgrade>
+    <Settings>
+        <SettingSql>
+            INSERT INTO db_version(from_version,current_version,last_update_datetime) VALUES({0},{1},now());
+        </SettingSql>
+    </Settings>
+    <UpgradeSql version="2">
+        <Author>李晓静</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql>
+            CREATE TABLE db_version ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, from_version INT NOT NULL, current_version INT NOT NULL, last_update_datetime DATETIME NOT NULL );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="3">
+        <Author>李晓静</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create1.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="4">
+        <Author>李晓静</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create2.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="5">
+        <Author>李晓静</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create3.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="6">
+        <Author>李晓静</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create4.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="7">
+        <Author>ryan</Author>
+        <Memo>
+            添加thirdpart字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `thirdpartaccount` ADD COLUMN `ThirdPartType` BIT NOT NULL AFTER `LoginAccountId`; 
+            ALTER TABLE `loginaccount` ADD COLUMN `Mobile` VARCHAR(50) NOT NULL AFTER `RestaurantId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="8">
+        <Author>林燕平</Author>
+        <Memo>
+            添加BillStatus字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `foodorder` ADD COLUMN `BillStatus` SMALLINT NOT NULL AFTER `FoodOrderStatus`; 
+            ALTER TABLE `FaceOrder` ADD COLUMN `BillStatus` SMALLINT NOT NULL AFTER `FaceOrderStatus`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="9">
+        <Author>栗堃</Author>
+        <Memo>
+            添加OrderId字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` ADD COLUMN `OrderId` BIGINT NOT NULL DEFAULT '0' AFTER `Comment`; 
+            ALTER TABLE `billlog` CHANGE COLUMN `OrderId` `OrderId` BIGINT NOT NULL DEFAULT '0' AFTER `Money`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="10">
+        <Author>ryan</Author>
+        <Memo>
+            添加表apptoken
+        </Memo>
+        <Sql>
+            CREATE TABLE `apptoken` ( `TokenId` VARCHAR(32) NOT NULL, `RestaurantId` INT(32) NOT NULL, `LoginAccountId` INT(32) NOT NULL, `LastAccessTime` DATETIME NOT NULL, `DeviceId` VARCHAR(50) NOT NULL, `Ip` VARCHAR(20) NULL DEFAULT NULL, PRIMARY KEY (`TokenId`));
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="11">
+        <Author>栗堃</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` ADD COLUMN `OrderType` INT NOT NULL DEFAULT '0' AFTER `OrderId`, ADD COLUMN `PayId` VARCHAR(50) NULL AFTER `OrderType`; ALTER TABLE `cash` ALTER `CashComment` DROP DEFAULT; 
+            ALTER TABLE `cash` CHANGE COLUMN `CashComment` `CashComment` VARCHAR(50) NULL AFTER `UserCardId`, ADD COLUMN `Voucher` VARCHAR(50) NULL AFTER `CashComment`, ADD COLUMN `CashDateTime` DATETIME NULL AFTER `Voucher`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="12">
+        <Author>林燕平</Author>
+        <Memo>
+            调整字段类型及结构
+        </Memo>
+        <Sql>
+            ALTER TABLE FaceOrder DROP column GatheringType; ALTER TABLE FaceOrder DROP column GatheringTime; 
+            ALTER TABLE FaceOrder DROP column FlowNo; 
+            ALTER TABLE FoodOrder DROP column GatheringType; 
+            ALTER TABLE FoodOrder DROP column GatheringTime; 
+            ALTER TABLE FoodOrder DROP column GatheringFlowNo; 
+            ALTER TABLE Restaurant modify RestaurantPhone varchar(50) NULL; 
+            ALTER TABLE Restaurant modify RestaurantLogoUrl varchar(300) NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="13">
+        <Author>林燕平</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create5.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="14">
+        <Author>栗堃</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` ADD COLUMN `CashId` BIGINT NOT NULL DEFAULT '0' AFTER `OrderId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="15">
+        <Author>ryan</Author>
+        <Memo>
+            调整字段类型及结构
+        </Memo>
+        <Sql>
+            ALTER TABLE `loginaccount` ALTER `Name` DROP DEFAULT; ALTER TABLE `loginaccount` CHANGE COLUMN `Name` `Name` VARCHAR(50) NULL AFTER `Id`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="16">
+        <Author>林燕平</Author>
+        <Memo>
+            FaceOrder表中添加AccountId字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `FaceOrder` ADD COLUMN `AccountId` INT NOT NULL DEFAULT '0' AFTER `RestaurantId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="17">
+        <Author>杨力</Author>
+        <Memo>
+            创建Device表
+        </Memo>
+        <Sql>
+            CREATE TABLE `device` ( `Id` INT(11) NOT NULL AUTO_INCREMENT, `DeviceId` VARCHAR(50) NOT NULL COMMENT '设备ID', `ClientId` VARCHAR(50) NOT NULL COMMENT '推送ID', `RestaurantId` INT(11) NOT NULL COMMENT '餐厅ID', `CreateTime` DATETIME NOT NULL COMMENT '创建时间', PRIMARY KEY (`Id`) ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="18">
+        <Author>栗堃</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` ADD COLUMN `IsDone` BIT NOT NULL DEFAULT b'0' AFTER `CashDateTime`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="19">
+        <Author>栗堃</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` CHANGE COLUMN `IsDone` `IsDone` INT NOT NULL DEFAULT '0' AFTER `CashDateTime`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="20">
+        <Author>林燕平</Author>
+        <Memo>
+            添加字段GatheringForm
+        </Memo>
+        <Sql>
+            ALTER TABLE `GatheringInfo` ADD COLUMN `GatheringForm` smallint NULL AFTER `GatheringType`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="21">
+        <Author>ryan</Author>
+        <Memo>
+            修改字段可空
+        </Memo>
+        <Sql>
+            ALTER TABLE `apptoken` ALTER `RestaurantId` DROP DEFAULT,ALTER `DeviceId` DROP DEFAULT; 
+            ALTER TABLE `apptoken` CHANGE COLUMN `RestaurantId` `RestaurantId` INT(32) NULL AFTER `TokenId`,CHANGE COLUMN `DeviceId` `DeviceId` VARCHAR(50) NULL AFTER `LastAccessTime`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="22">
+        <Author>林燕平</Author>
+        <Memo>
+            添加字段PayNo，PayMoney
+        </Memo>
+        <Sql>
+            ALTER TABLE `GatheringInfo` ADD COLUMN `PayNo` Nvarchar(50) NULL AFTER `GatheringForm`; 
+            ALTER TABLE `GatheringInfo` ADD COLUMN `PayMoney` Decimal NULL AFTER `GatheringForm`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="23">
+        <Author>杨力</Author>
+        <Memo>
+            订单备注
+        </Memo>
+        <Sql>
+            CREATE TABLE `remarks` ( `Id` INT(11) NOT NULL, `ResturantId` INT(11) NOT NULL COMMENT '餐厅ID', `Content` VARCHAR(50) NOT NULL COMMENT '内容', PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="24">
+        <Author>李晓静</Author>
+        <Memo>
+            餐厅增加子名称
+        </Memo>
+        <Sql>
+            alter table restaurant add column SubName varchar(100) null comment '餐厅子名称';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="26">
+        <Author>杨力</Author>
+        <Memo>
+            修改主键
+        </Memo>
+        <Sql>
+            Alter table remarks drop primary key; alter table remarks modify id int auto_increment primary key;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="27">
+        <Author>李晓静</Author>
+        <Memo>
+            支付信息增加餐厅ID
+        </Memo>
+        <Sql>
+            alter table gatheringinfo add column RestaurantId int not null default 0;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="28">
+        <Author>杨力</Author>
+        <Memo>
+            修改餐厅ID字段
+        </Memo>
+        <Sql>
+            alter table remarks change ResturantId RestaurantId INT(11) NOT NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="29">
+        <Author>林燕平</Author>
+        <Memo>
+            修改金额字段类型成decimal(10,2)
+        </Memo>
+        <Sql>
+            alter table gatheringInfo MODIFY PayMoney Decimal(10,2) not null; 
+            alter table faceOrder MODIFY TotalPrice Decimal(10,2) not null; 
+            alter table foodOrder MODIFY TotalPrice Decimal(10,2) not null; 
+            alter table foodOrder MODIFY PayableMoney Decimal(10,2) not null;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="30">
+        <Author>杨力</Author>
+        <Memo>
+            修改金额字段类型成decimal(10,2)
+        </Memo>
+        <Sql>
+            alter table food MODIFY FoodPrice Decimal(10,2) not null;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="31">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` CHANGE COLUMN `Amount` `Amount` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `BillType`; 
+            ALTER TABLE `billlog` CHANGE COLUMN `Money` `Money` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `CreateDateTime`; 
+            ALTER TABLE `cash` CHANGE COLUMN `Money` `Money` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `AccountantId`; 
+            ALTER TABLE `myaccount` CHANGE COLUMN `Surplus` `Surplus` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `RestaurantId`, CHANGE COLUMN `BlockSurplus` `BlockSurplus` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `Surplus`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="32">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` ADD COLUMN `Present` DECIMAL(10,2) NOT NULL DEFAULT '0' AFTER `PayId`; 
+            ALTER TABLE `cash` CHANGE COLUMN `Id` `Id` BIGINT NOT NULL DEFAULT '0' FIRST;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="33">
+        <Author>栗堃</Author>
+        <Memo>
+            添加索引
+        </Memo>
+        <Sql>
+            ALTER TABLE `apptoken` ADD INDEX `TokenId` (`TokenId`); 
+            ALTER TABLE `bankcard` ADD INDEX `RestaurantId` (`RestaurantId`); 
+            ALTER TABLE `bill` ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `CreateDateTime` (`CreateDateTime`), ADD INDEX `BillType` (`BillType`), ADD INDEX `BillStaus` (`BillStaus`), ADD INDEX `OrderId` (`OrderId`), ADD INDEX `CashId` (`CashId`); ALTER TABLE `cash` ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `AccountantId` (`AccountantId`), ADD INDEX `CreateDateTime` (`CreateDateTime`), ADD INDEX `BillStaus` (`BillStaus`), ADD INDEX `IsDone` (`IsDone`); 
+            ALTER TABLE `myaccount` ADD INDEX `RestaurantId` (`RestaurantId`); 
+            ALTER TABLE `device` ADD INDEX `DeviceId` (`DeviceId`), ADD INDEX `RestaurantId` (`RestaurantId`); ALTER TABLE `employee` ADD INDEX `RestaurantId` (`RestaurantId`); 
+            ALTER TABLE `faceorder` ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `AccountId` (`AccountId`), ADD INDEX `FaceOrderStatus` (`FaceOrderStatus`), ADD INDEX `PayNo` (`PayNo`), ADD INDEX `CustomerMobile` (`CustomerMobile`), ADD INDEX `CreateDate` (`CreateDate`), ADD INDEX `BillStatus` (`BillStatus`); ALTER TABLE `gatheringinfo` ADD INDEX `OrderId` (`OrderId`), ADD INDEX `GatheringType` (`GatheringType`), ADD INDEX `PayNo` (`PayNo`), ADD INDEX `FlowNo` (`FlowNo`), ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `GatheringForm` (`GatheringForm`); ALTER TABLE `food` ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `FoodCategoryId` (`FoodCategoryId`), ADD INDEX `FoodStaus` (`FoodStaus`); ALTER TABLE `foodcategory` ADD INDEX `RestaurantId` (`RestaurantId`); ALTER TABLE `foodorder` ADD INDEX `AccountId` (`AccountId`), ADD INDEX `RestaurantId` (`RestaurantId`), ADD INDEX `PayNo` (`PayNo`), ADD INDEX `CreateDate` (`CreateDate`), ADD INDEX `FoodOrderStatus` (`FoodOrderStatus`), ADD INDEX `BillStatus` (`BillStatus`), ADD INDEX `CustomerMobile` (`CustomerMobile`); ALTER TABLE `foodorderdetail` ADD INDEX `FoodOrderId` (`FoodOrderId`), ADD INDEX `FoodId` (`FoodId`); ALTER TABLE `loginaccount` ADD INDEX `Mobile` (`Mobile`), ADD INDEX `Status` (`Status`), ADD INDEX `RestaurantId` (`RestaurantId`); ALTER TABLE `paycode` ADD INDEX `Id` (`Id`); ALTER TABLE `remarks` ADD INDEX `RestaurantId` (`RestaurantId`); ALTER TABLE `thirdpartaccount` ADD INDEX `OpenId` (`OpenId`);
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="34">
+        <Author>林燕平</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE FoodOrder ADD COLUMN `DeviceId` Nvarchar(50) NULL AFTER `AccountId`; ALTER TABLE FaceOrder ADD COLUMN `DeviceId` Nvarchar(50) NULL AFTER `AccountId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="35">
+        <Author>李晓静</Author>
+        <Memo>
+            支付信息表增加订单类型字段
+        </Memo>
+        <Sql>
+            alter table gatheringinfo add column OrderType smallint default 0 comment '订单类型';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="36">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `myaccount` ADD COLUMN `AllCashed` DECIMAL(10,2) NOT NULL DEFAULT '0.00' AFTER `BlockSurplus`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="37">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `gatheringinfo` ADD COLUMN `OrderTime` DATETIME NULL DEFAULT NULL AFTER `GatheringTime`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="38">
+        <Author>栗堃</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create6.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="39">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` CHANGE COLUMN `DeviceId` `DeviceId` VARCHAR(50) NOT NULL DEFAULT '0' AFTER `LoginId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="40">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `remarks` ADD COLUMN `Sort` INT NULL AFTER `Content`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="41">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` CHANGE COLUMN `BankName` `BankName` VARCHAR(50) NULL DEFAULT '0' AFTER `BillStaus`, CHANGE COLUMN `UserCardId` `UserCardId` VARCHAR(50) NULL DEFAULT '0' AFTER `UserName`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="42">
+        <Author>李晓静</Author>
+        <Memo>
+            修点菜订单明细价格类型
+        </Memo>
+        <Sql>
+            ALTER TABLE `foodorderdetail` CHANGE COLUMN `FoodPrice` `FoodPrice` decimal(10,2) NOT NULL DEFAULT 0;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="43">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加餐厅地址
+        </Memo>
+        <Sql>
+            ALTER TABLE `restaurant` ADD COLUMN `Address` VARCHAR(100) NULL DEFAULT NULL COMMENT '门店地址';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="44">
+        <Author>栗堃</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create7.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="45">
+        <Author>李晓静</Author>
+        <Memo>
+            增加存微信Accesstoken的表
+        </Memo>
+        <Sql>
+            create table wechat_accesstoken( access_token varchar(600), last_udpate_time datetime );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="46">
+        <Author>栗堃</Author>
+        <Memo>
+            修改字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `cashlog` ADD COLUMN `CashId` BIGINT NOT NULL AFTER `Id`; ALTER TABLE `cash` ADD COLUMN `RestaurantName` VARCHAR(50) NULL DEFAULT '0' AFTER `RestaurantId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="47">
+        <Author>李晓静</Author>
+        <Memo>
+            增加存微信Accesstoken的表
+        </Memo>
+        <Sql>
+            drop table wechat_accesstoken;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="48">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加提款编号
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` ADD COLUMN `TransferId` VARCHAR(50) NOT NULL AFTER `IsDone`; ALTER TABLE `cash` ADD COLUMN `RtSubName` VARCHAR(50) NULL AFTER `RestaurantName`; ALTER TABLE `cash` ADD COLUMN `Mobile` VARCHAR(50) NULL AFTER `TransferId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="49">
+        <Author>栗堃</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create8.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="50">
+        <Author>栗堃</Author>
+        <Memo>
+            创建银行表
+        </Memo>
+        <Sql>
+            CREATE TABLE `bank_card_bin` ( `id` int(11) NOT NULL AUTO_INCREMENT, `card_bin` varchar(50) DEFAULT NULL, `bank_name` varchar(100) DEFAULT NULL, `bank_id` int(11) DEFAULT NULL, `card_name` varchar(100) DEFAULT NULL, `card_type` varchar(50) DEFAULT NULL, `bin_digits` int(11) DEFAULT NULL, `card_digits` int(11) DEFAULT NULL, `demo` varchar(50) DEFAULT NULL, PRIMARY KEY (`id`) ) ;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="51">
+        <Author>栗堃</Author>
+        <Memo>
+            初始化数据库
+        </Memo>
+        <Sql ref="create10.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="52">
+        <Author>栗堃</Author>
+        <Memo>
+            售罄
+        </Memo>
+        <Sql>
+            ALTER TABLE `food` ADD COLUMN `SaleStatus` INT NOT NULL DEFAULT '1' AFTER `Sort`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="53">
+        <Author>陈敬男</Author>
+        <Memo>
+            订单添加餐厅信息
+        </Memo>
+        <Sql>
+            ALTER TABLE `faceorder` add column `RtSubName` VARCHAR(100) NULL,add COLUMN `RestaurantName` VARCHAR(50) null; ALTER TABLE `foodorder` add column `RtSubName` VARCHAR(100) NULL,add COLUMN `RestaurantName` VARCHAR(50) null;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="54">
+        <Author>栗堃</Author>
+        <Memo>
+            允许空
+        </Memo>
+        <Sql>
+            ALTER TABLE `bill` CHANGE COLUMN `Comment` `Comment` VARCHAR(50) NULL DEFAULT '0'; ALTER TABLE `bankname` CHANGE COLUMN `BankName` `Name` VARCHAR(50) NULL DEFAULT NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="55">
+        <Author>栗堃</Author>
+        <Memo>
+            热门银行
+        </Memo>
+        <Sql>
+            ALTER TABLE `bankname` add COLUMN `IsHot` BIT NULL DEFAULT 0; UPDATE bankname SET IsHot=1 WHERE Name in ('广发银行','华夏银行','交通银行','浦发银行','平安银行','兴业银行','中国工商银行','招商银行','中国光大银行','中信银行','中国建设银行','中国银行','中国民生银行');
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="56">
+        <Author>栗堃</Author>
+        <Memo>
+            重复
+        </Memo>
+        <Sql>
+            ALTER TABLE `gatheringinfo` ADD COLUMN `IsRepeatPay` BIT NULL DEFAULT b'0' AFTER `OrderType`, ADD COLUMN `ThirdPartFlowNo` VARCHAR(50) NULL DEFAULT '0' AFTER `IsRepeatPay`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="57">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加打款时间
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` ADD COLUMN `DkTime` DATETIME NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="58">
+        <Author>栗堃</Author>
+        <Memo>
+            单位
+        </Memo>
+        <Sql>
+            ALTER TABLE `food` ADD COLUMN `Unit` VARCHAR(50) NULL AFTER `SaleStatus`; ALTER TABLE `foodorderdetail` ADD COLUMN `Unit` VARCHAR(50) NULL AFTER `Amount`; ALTER TABLE `foodorderdetail` CHANGE COLUMN `Amount` `Amount` DECIMAL(10,2) NOT NULL AFTER `FoodPrice`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="59">
+        <Author>李晓静</Author>
+        <Memo>
+            app升级记录表
+        </Memo>
+        <Sql>
+            CREATE TABLE `app_upgrade` ( `Id` int NOT NULL AUTO_INCREMENT, `Version` varchar(10) NULL COMMENT '应用版本号', `IsForce` bit NOT NULL COMMENT '是否强制升级 0 =不强制 1=强制', `DownloadUrl` varchar(255) NULL, `Description` text NULL, `CreateDate` datetime NOT NULL, PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="60">
+        <Author>陈敬男</Author>
+        <Memo>
+            取餐码
+        </Memo>
+        <Sql>
+            CREATE TABLE `foodcode` ( `Id` INT(11) NOT NULL, `FoodCode` VARCHAR(50) NOT NULL, `LastTime` DATE NOT NULL ); ALTER TABLE `foodorder` ADD COLUMN `FoodCode` VARCHAR(50) NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="61">
+        <Author>李晓静</Author>
+        <Memo>
+            第三方应用授权码表
+        </Memo>
+        <Sql>
+            CREATE TABLE `app_oauth_code` ( `Id` bigint NOT NULL AUTO_INCREMENT, `Code` varchar(50) NOT NULL, `LoginAccountId` int NOT NULL, `RestaurantId` int NOT NULL, `CreateDate` datetime NOT NULL, PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="62">
+        <Author>陈敬男</Author>
+        <Memo>
+            appInfo
+        </Memo>
+        <Sql>
+            CREATE TABLE `appinfo` ( `Id` VARCHAR(32) NOT NULL, `Secreat` VARCHAR(32) NOT NULL, `Name` VARCHAR(100) NOT NULL, `Description` VARCHAR(150) NOT NULL, `Icon` VARCHAR(100) NOT NULL, `RedirectUrl` VARCHAR(150) NOT NULL, `IsEnable` BIT(1) NOT NULL DEFAULT b'0', PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="63">
+        <Author>栗堃</Author>
+        <Memo>
+            customer
+        </Memo>
+        <Sql>
+            CREATE TABLE `Customer` ( `Id` INT NOT NULL AUTO_INCREMENT, `Nickname` VARCHAR(50) NULL, `Sex` VARCHAR(50) NULL, `Province` VARCHAR(50) NULL, `City` VARCHAR(50) NULL, `HeadUrl` VARCHAR(50) NULL, `CreateDate` DATETIME NULL, PRIMARY KEY (`Id`) ); CREATE TABLE IF NOT EXISTS `linkedthirdaccount` ( `ThirdAccountType` int(11) NULL, `WechatAppId` varchar(50) NULL, `WechatOpenId` varchar(50) NULL, `WechatUionId` varchar(50) NULL, `AliUserId` varchar(50) NULL, `CustomerId` int(11) NULL );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="64">
+        <Author>李晓静</Author>
+        <Memo>
+            修改商品价格精度
+        </Memo>
+        <Sql>
+            alter table food modify FoodPrice decimal(10,4); alter table foodorderdetail modify FoodPrice decimal(10,4);
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="65">
+        <Author>栗堃</Author>
+        <Memo>
+            加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `foodorder` ADD COLUMN `FoodOrderSource` INT NULL AFTER `FoodCode`, ADD COLUMN `OrderTypeByFood` INT NULL AFTER `FoodOrderSource`, ADD COLUMN `FoodOrderBusinessStatus` INT NULL AFTER `OrderTypeByFood`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="66">
+        <Author>李晓静</Author>
+        <Memo>
+            增加地三方流水账表
+        </Memo>
+        <Sql>
+            CREATE TABLE `FlowAccountOrder` ( `Id` bigint NOT NULL, `ThirdResturantId` varchar(10) NULL, `LocalResturantId` int NOT NULL, `ThirdOrderId` varchar(30) NULL, `ThirdOrderType` varchar(8) NULL, `Money` decimal(10,2) NOT NULL, `CreateDate` datetime NOT NULL, `ThirdSystemName` varchar(8) NULL, `PayType` tinyint NULL, `Comment` varchar(100) NULL, `IsInAccount` bit NULL, PRIMARY KEY (`Id`) , UNIQUE INDEX `third_third_third` (`ThirdOrderId`, `ThirdOrderType`, `ThirdSystemName`), INDEX `is_local_cre` (`IsInAccount`, `LocalResturantId`, `CreateDate`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="67">
+        <Author>李晓静</Author>
+        <Memo>
+            增加地三方流水账表
+        </Memo>
+        <Sql>
+            alter table flowaccountorder add column PayFlowNo varchar(30) comment '第三方支付流水号';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="68">
+        <Author>陈敬男</Author>
+        <Memo>
+            增加营收统计表
+        </Memo>
+        <Sql>
+            CREATE TABLE `revenueday` ( `RestaurantId` INT(11) NULL DEFAULT NULL, `TimeLable` DATE NOT NULL, `Money` DECIMAL(20,2) NOT NULL, `OrderNum` INT(11) NOT NULL, `OrderType` INT(2) NULL DEFAULT NULL, `IsOnline` BIT(1) NOT NULL );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="69">
+        <Author>李晓静</Author>
+        <Memo>
+            餐厅增加第三方系统关联信息
+        </Memo>
+        <Sql>
+            alter table restaurant add column ThirdRestaurantId varchar(10) comment '第三方餐厅ID', add column ThirdSystemName varchar(8) comment '第三方系统名称';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="70">
+        <Author>栗堃</Author>
+        <Memo>
+            支付信息增加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `gatheringinfo` ADD COLUMN `orderTypeByFood` INT NOT NULL DEFAULT '3' AFTER `ThirdPartFlowNo`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="71">
+        <Author>陈敬男</Author>
+        <Memo>
+            佣金
+        </Memo>
+        <Sql>
+            CREATE TABLE `commission` ( `Id` INT(11) NOT NULL AUTO_INCREMENT, `Name` VARCHAR(50) NOT NULL, `Rule` VARCHAR(2000) NOT NULL, `Description` VARCHAR(200) NOT NULL, `ModifyTime` DATETIME NULL DEFAULT NULL, `CreateTime` DATETIME NOT NULL, `RelatedRestaurant` INT(11) NOT NULL DEFAULT '0', `IsDefault` BIT(1) NOT NULL DEFAULT b'0', PRIMARY KEY (`Id`), INDEX `IsDefault` (`IsDefault`), INDEX `Name` (`Name`) );CREATE TABLE `commissionmemo` ( `Id` INT(11) NOT NULL AUTO_INCREMENT, `UserId` INT(11) NOT NULL, `Action` VARCHAR(50) NOT NULL, `OldContent` VARCHAR(3000) NULL DEFAULT NULL, `NewContent` VARCHAR(3000) NOT NULL, `Time` DATETIME NOT NULL, PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="72">
+        <Author>栗堃</Author>
+        <Memo>
+            退款
+        </Memo>
+        <Sql>
+            CREATE TABLE IF NOT EXISTS `refund` ( `Id` bigint(20) NOT NULL, `RefundSource` int(11) NOT NULL, `CreateDateTime` datetime NOT NULL, `RefundStatus` int(11) NOT NULL, `Money` decimal(10,2) NOT NULL, `OrderId` bigint(20) NOT NULL, `PayFlowNo` varchar(50) NOT NULL, `RefundPayType` int(11) NOT NULL, `PayForm` int(11) NOT NULL, `UpdateDateTime` datetime DEFAULT NULL, `RestaurantId` int(11) NOT NULL, `RefundCode` int(11) DEFAULT NULL, `FailCommit` varchar(50) DEFAULT NULL, `LoginAccountId` int(11) NOT NULL, `Commit` varchar(50) NOT NULL, PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="73">
+        <Author>栗堃</Author>
+        <Memo>
+            退款
+        </Memo>
+        <Sql>
+            ALTER TABLE `myaccount` ADD COLUMN `RefundBlockSurplus` DECIMAL(10,2) NOT NULL DEFAULT '0.00' AFTER `AllCashed`, ADD COLUMN `AllRefund` DECIMAL(10,2) NOT NULL DEFAULT '0.00' AFTER `RefundBlockSurplus`; ALTER TABLE `bill` ADD COLUMN `RefundId` BIGINT NULL AFTER `Present`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="74">
+        <Author>栗堃</Author>
+        <Memo>
+            退款
+        </Memo>
+        <Sql>
+            ALTER TABLE `refund` ADD COLUMN `IsDone` BIT NOT NULL DEFAULT b'0' AFTER `Commit`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="75">
+        <Author>陈敬男</Author>
+        <Memo>
+            更新佣金备忘及商户
+        </Memo>
+        <Sql>
+            ALTER TABLE `commissionmemo` ADD COLUMN `CommissonId` INT NOT NULL; ALTER TABLE `restaurant` ADD COLUMN `ProvinceName` varchar(50); ALTER TABLE `restaurant` ADD COLUMN `CityName` varchar(50);
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="76">
+        <Author>栗堃</Author>
+        <Memo>
+            退款
+        </Memo>
+        <Sql>
+            ALTER TABLE `refund` CHANGE COLUMN `RefundCode` `RefundCode` VARCHAR(50) NULL DEFAULT NULL AFTER `RestaurantId`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="77">
+        <Author>陈敬男</Author>
+        <Memo>
+            初始化restaurant_commission、province、city
+        </Memo>
+        <Sql ref="create11.sql" />
+    </UpgradeSql>
+    <UpgradeSql version="78">
+        <Author>陈敬男</Author>
+        <Memo>
+            创建表rroperatememo
+        </Memo>
+        <Sql>
+            CREATE TABLE `rroperatememo` ( `Id` INT(11) NOT NULL AUTO_INCREMENT, `UserId` INT(11) NULL DEFAULT NULL, `Action` VARCHAR(50) NULL DEFAULT NULL, `OldContent` VARCHAR(150) NULL DEFAULT NULL, `NewContent` VARCHAR(150) NULL DEFAULT NULL, `ModifyTime` DATETIME NULL DEFAULT NULL, `RestaurantId` INT(11) NULL DEFAULT NULL, PRIMARY KEY (`Id`) );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="79">
+        <Author>陈敬男</Author>
+        <Memo>
+            修改cash
+        </Memo>
+        <Sql>
+            ALTER TABLE `cash` ADD COLUMN `Commission` DECIMAL(10,2) NOT NULL DEFAULT '0.00';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="80">
+        <Author>李晓静</Author>
+        <Memo>
+            在支付表中，增加退款状态字段
+        </Memo>
+        <Sql>
+            alter table gatheringinfo add column RefundStatus tinyint default 0 comment '退款状态，0=未退过款';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="81">
+        <Author>林燕平</Author>
+        <Memo>
+            在餐厅表中，增加区域和推荐人手机号字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `restaurant` ADD COLUMN `RecommendedMobile` varchar(50) NULL AFTER `Address`; ALTER TABLE `restaurant` ADD COLUMN `RegionName` varchar(50) NULL AFTER `CityName`;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="82">
+        <Author>李晓静</Author>
+        <Memo>
+            在订单表中增加退款状态字段
+        </Memo>
+        <Sql>
+            alter table foodorder add column RefundStatus tinyint default 0;
+            alter table faceorder add column RefundStatus tinyint default 0;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="83">
+        <Author>李晓静</Author>
+        <Memo>
+            在餐厅佣金表中添加区域和推荐人手机号字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `restaurant_commission` ADD COLUMN `RecommendedMobile` varchar(50) NULL ; 
+            ALTER TABLE `restaurant_commission` ADD COLUMN `RegionName` varchar(50) NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="84">
+        <Author>林燕平</Author>
+        <Memo>
+            添加省市区基础表
+        </Memo>
+        <Sql>
+            create table NewProvince ( Id int primary key not null , name nvarchar(50) not null, Fid int not null default 1 );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="85">
+        <Author>林燕平</Author>
+        <Memo>
+            添加省市区基础表（换表）
+        </Memo>
+        <Sql>
+            drop table NewProvince; create table Area ( Id int primary key not null , Name nvarchar(50) not null, Fid int not null default 1 );
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="86">
+        <Author>王瑞瑞</Author>
+        <Memo>
+            表bankcard 跟 bankname增加银行颜色跟Icon字段
+        </Memo>
+        <Sql>
+            ALTER TABLE bankcard ADD COLUMN BankIcon varchar(50) NULL COMMENT '银行图标'; 
+            ALTER TABLE bankcard ADD COLUMN BankColor varchar(50) NULL COMMENT '银行颜色';
+            ALTER TABLE bankname ADD COLUMN BankIcon varchar(50) NULL COMMENT '银行图标';
+            ALTER TABLE bankname ADD COLUMN BankColor varchar(50) NULL COMMENT '银行颜色';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="87">
+        <Author>王瑞瑞</Author>
+        <Memo>
+            给cash表的TransferId字段设置默认值0
+        </Memo>
+        <Sql>
+            ALTER TABLE cash ALTER COLUMN TransferId SET DEFAULT '0' ;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="88">
+        <Author>杨力</Author>
+        <Memo>
+            给foodorder、faceorder表的FractionMoney、RoundingType字段设置默认值0
+        </Memo>
+        <Sql>
+            alter table foodorder add column FractionMoney decimal(10,2) default 0.00; alter table foodorder add column RoundingType tinyint default 0; alter table faceorder add column FractionMoney decimal(10,2) default 0.00; alter table faceorder add column RoundingType tinyint default 0;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="89">
+        <Author>杨力</Author>
+        <Memo>
+            给faceorder表的PayableMoney字段设置默认值0
+        </Memo>
+        <Sql>
+            alter table faceorder add column PayableMoney decimal(10,2) default 0.00;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="90">
+        <Author>杨力</Author>
+        <Memo>
+            给faceorder表的PayableMoney=默认值0的 全部赋值为TotalPrice
+        </Memo>
+        <Sql>
+            update faceorder set PayableMoney=TotalPrice where PayableMoney=0;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="91">
+        <Author>王瑞</Author>
+        <Memo>
+            给restaurant_commission 跟 restaurant 表添加 IsTest 字段
+        </Memo>
+        <Sql>
+            ALTER TABLE restaurant_commission ADD COLUMN IsTest bit DEFAULT 0 NULL COMMENT '是否是测试店'; 
+            ALTER TABLE restaurant ADD COLUMN IsTest bit DEFAULT 0 NULL COMMENT '是否是测试店';
+        </Sql>
+    </UpgradeSql>
+	 <UpgradeSql version="92">
+        <Author>杨力</Author>
+        <Memo>
+            给appinfo 表添加  字段
+        </Memo>
+        <Sql>
+            ALTER TABLE appinfo ADD COLUMN IsHot bit DEFAULT 0  COMMENT '是否热门'; 
+			ALTER TABLE appinfo ADD COLUMN `Sort` INT DEFAULT  0 COMMENT '排序'; 
+			ALTER TABLE appinfo ADD COLUMN `CreateTime` datetime DEFAULT  null COMMENT '创建时间'; 
+        </Sql>
+    </UpgradeSql>
+		 <UpgradeSql version="93">
+        <Author>杨力</Author>
+        <Memo>
+            创建AppCategory表 
+        </Memo>
+        <Sql>
+            CREATE TABLE `appcategory` (
+			`Id` INT(11) NOT NULL AUTO_INCREMENT,
+			`Name` VARCHAR(50) NOT NULL COMMENT '分类名称',
+			`Sort` INT(11) NOT NULL COMMENT '排序',
+			`CreateTime` DATETIME NOT NULL COMMENT '创建时间',
+			PRIMARY KEY (`Id`)
+			);
+        </Sql>
+    </UpgradeSql>
+	 <UpgradeSql version="94">
+        <Author>杨力</Author>
+        <Memo>
+            给appinfo 表添加 AppCategoryId 字段
+        </Memo>
+        <Sql>
+            ALTER TABLE appinfo ADD COLUMN AppCategoryId int DEFAULT 0  COMMENT 'App分类ID';  
+        </Sql>
+    </UpgradeSql>
+	 <UpgradeSql version="95">
+        <Author>林燕平</Author>
+        <Memo>
+            bankcard 表添加 IsActived 字段
+        </Memo>
+        <Sql>
+            ALTER TABLE bankcard ADD COLUMN IsActived bit DEFAULT 0  COMMENT '是否常用银行卡的标识';  
+        </Sql>
+    </UpgradeSql>
+	 <UpgradeSql version="96">
+        <Author>李晓静</Author>
+        <Memo>
+            apptoken增加字段
+        </Memo>
+        <Sql>
+            alter table apptoken 
+				add column Source varchar(9) comment 'token 来源 bh5,bpad ,ch5';
+        </Sql>
+    </UpgradeSql>
+     <UpgradeSql version="97">
+        <Author>陈敬男</Author>
+        <Memo>
+            restaurant增加字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `restaurant` ADD COLUMN `IsBuy` BIT NULL COMMENT '是否购买收银设备';
+ALTER TABLE `restaurant` ADD COLUMN `IsVerify` BIT(1) NULL DEFAULT NULL COMMENT '是否实名通过认证';
+
+ALTER TABLE `restaurant_commission` ADD COLUMN `IsBuy` BIT NULL COMMENT '是否购买收银设备';
+ALTER TABLE `restaurant_commission` ADD COLUMN `IsVerify` BIT(1) NULL DEFAULT NULL COMMENT '是否实名通过认证';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="98">
+        <Author>陈敬男</Author>
+        <Memo>
+            表添加app_upgrade字段
+        </Memo>
+        <Sql>
+             ALTER TABLE `app_upgrade`
+	ADD COLUMN `Size` INT NOT NULL;
+        </Sql>
+    </UpgradeSql>
+	
+	<UpgradeSql version="99">
+        <Author>杨力</Author>
+        <Memo>
+            修改RedirectUrl字段长度
+        </Memo>
+        <Sql>
+             alter table appinfo modify column RedirectUrl varchar(250);
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="100">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表department、salesman
+        </Memo>
+        <Sql>
+            CREATE TABLE `department` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`Name` VARCHAR(50) NOT NULL,
+	`CasherNum` INT(11) NOT NULL DEFAULT '0',
+	`WalletNum` INT(11) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`Id`)
+);CREATE TABLE `salesman` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`Name` VARCHAR(50) NULL DEFAULT NULL,
+	`Phone` VARCHAR(20) NULL DEFAULT NULL,
+	`DepartmentId` INT(11) NULL DEFAULT NULL,
+	`CasherNum` INT(11) NULL DEFAULT NULL,
+	`WalletNum` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`Id`)
+);
+           
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="101">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+              ALTER TABLE `salesman`
+	ADD COLUMN `UserId` INT   NULL DEFAULT NULL;
+        </Sql>
+    </UpgradeSql>
+     <UpgradeSql version="102">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+              ALTER TABLE `department`
+	ADD COLUMN `UserId` INT   NULL DEFAULT NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="103">
+        <Author>李晓静</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+            alter table gatheringinfo 
+				add column BillStatus tinyint default 0 comment '入账状态，1=已入账 0,2 = 带入账';
+        </Sql>
+    </UpgradeSql>  
+    <UpgradeSql version="104">
+        <Author>林燕平</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+            ALTER TABLE gatheringInfo ADD COLUMN PartnerNo VARCHAR(50) NOT NULL;
+            ALTER TABLE refund ADD COLUMN PartnerNo VARCHAR(50) NOT NULL;
+        </Sql>
+    </UpgradeSql> 
+    <UpgradeSql version="105">
+        <Author>林燕平</Author>
+        <Memo>
+            修改字段类型
+        </Memo>
+        <Sql>
+            alter table gatheringInfo modify  PartnerNo VARCHAR(50) null comment'商户号';
+			alter table refund modify  PartnerNo VARCHAR(50) null comment'商户号';
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="106">
+        <Author>李晓静</Author>
+        <Memo>
+            退款单增加字段
+        </Memo>
+        <Sql>
+            alter table refund
+				add column OperatorUserId int default 0 comment '操作人',
+				add column OperatorName varchar(50) default '' comment '操作人姓名',
+				add column RestaurantName varchar(100) default '' comment '餐厅名称';
+        </Sql>
+    </UpgradeSql> 	
+      <UpgradeSql version="107">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+             ALTER TABLE `restaurant_commission`
+				ADD COLUMN `SalesManName` VARCHAR(50) NULL DEFAULT NULL;
+			ALTER TABLE `restaurant_commission`
+				ADD COLUMN `SalesManId` INT(11) NULL DEFAULT NULL;
+			ALTER TABLE `restaurant_commission`
+				ADD INDEX `SalesManId` (`SalesManId`);
+			ALTER TABLE `revenueday`
+				ADD COLUMN `RestaurantName` VARCHAR(50) NULL DEFAULT NULL AFTER `RestaurantId`;
+			ALTER TABLE `gatheringinfo`
+				ADD COLUMN `RestaurantName` VARCHAR(50) NULL DEFAULT null;
+        </Sql>
+    </UpgradeSql>	
+    <UpgradeSql version="108">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+           ALTER TABLE `restaurant`
+	Add COLUMN `DepartmentId`   int NULL DEFAULT NULL COMMENT '关联销售部门';
+	ALTER TABLE `restaurant_commission`
+	Add COLUMN `DepartmentId`   int NULL DEFAULT NULL COMMENT '关联销售部门Id';
+		ALTER TABLE `restaurant_commission`
+	Add COLUMN `DepartmentName`    VARCHAR(50)   NULL   DEFAULT NULL COMMENT '关联销售部门名称';
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="109">
+		<Author>李晓静</Author>
+        <Memo>
+            移除字段
+        </Memo>
+		<Sql>
+			alter table gatheringinfo
+				drop column RestaurantName;
+		</Sql>
+	</UpgradeSql>
+     <UpgradeSql version="110">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加表字段
+        </Memo>
+        <Sql>
+            ALTER TABLE `revenueday`
+	CHANGE COLUMN `TimeLable` `TimeLable` DATETIME NOT NULL;
+ALTER TABLE `revenueday` ADD COLUMN `TimeLevel` TINYINT(4) default 2 NOT NULL;
+ALTER TABLE `revenueday` ADD COLUMN `HasCasher` bit  NULL default NULL;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="111">
+		<Author>李晓静</Author>
+        <Memo>
+            资金记录表增加支付方式字段
+        </Memo>
+		<Sql>
+			alter table bill
+				add column PayType smallint default 0 comment '相关支付方式';
+		</Sql>
+	</UpgradeSql>
+    <UpgradeSql version="112">
+		<Author>李晓静</Author>
+        <Memo>
+            增加物料历史表
+        </Memo>
+		<Sql>
+			CREATE TABLE `MaterialHistory` (
+                `RestaurantId` int NOT NULL,
+                `Material` smallint NOT NULL,
+                `CreateDate` datetime NOT NULL,
+                `Status` tinyint NOT NULL,
+                `OperatorName` varchar(50) NOT NULL,
+                INDEX `Material_Restaurant_INdex` (`RestaurantId`)
+            );
+		</Sql>
+	</UpgradeSql>
+    <UpgradeSql version="113">
+		<Author>李晓静</Author>
+        <Memo>
+            增加桌牌物料进店状态
+        </Memo>
+		<Sql>
+			alter table restaurant_commission
+	            add column MaterialStatus tinyint default null comment '桌牌物料进店状态';	
+		</Sql>
+	</UpgradeSql>		
+    <UpgradeSql version="114">
+		<Author>陈敬男</Author>
+        <Memo>
+             删除多余字段
+        </Memo>
+		<Sql>
+			ALTER TABLE `revenueday`
+	DROP COLUMN `RestaurantName`;
+		</Sql>
+	</UpgradeSql>		
+    <UpgradeSql version="115">
+		<Author>陈敬男</Author>
+        <Memo>
+            MaterialStatus 默认值
+        </Memo>
+		<Sql>
+			ALTER TABLE `restaurant_commission`
+	CHANGE COLUMN `MaterialStatus` `MaterialStatus` TINYINT(4) NULL DEFAULT '2' COMMENT '桌牌物料进店状态';
+		</Sql>
+	</UpgradeSql>	
+	 <UpgradeSql version="116">
+        <Author>林燕平</Author>
+        <Memo>
+            桌号
+        </Memo>
+        <Sql>
+            ALTER TABLE foodorder ADD COLUMN `TableNumber`  varchar(50) NULL  AFTER `comment`;
+        </Sql>
+    </UpgradeSql>
+     <UpgradeSql version="117">
+        <Author>陈敬男</Author>
+        <Memo>
+            saletransmemo表
+        </Memo>
+        <Sql>
+            CREATE TABLE `saletransmemo` (
+	`Id` INT(11) NOT NULL AUTO_INCREMENT,
+	`FromDepartmentId` INT(11) NOT NULL,
+	`FromDepartmentName` VARCHAR(150) NOT NULL,
+	`FromSaleId` INT(11) NOT NULL,
+	`FromSaleName` VARCHAR(150) NOT NULL,
+	`ToDepartmentId` INT(11) NOT NULL,
+	`ToDepartmentName` VARCHAR(150) NOT NULL,
+	`ToSaleId` INT(11) NOT NULL,
+	`ToSaleName` VARCHAR(150) NOT NULL,
+	`UserId` INT(11) NOT NULL,
+	PRIMARY KEY (`Id`)
+);
+        </Sql>
+    </UpgradeSql>
+      <UpgradeSql version="118">
+        <Author>陈敬男</Author>
+        <Memo>
+            saletransmemo表添加字段
+        </Memo>
+        <Sql>
+           ALTER TABLE `saletransmemo` ADD COLUMN `RestaurantId` INT not null;
+ALTER TABLE `saletransmemo`
+	 ADD COLUMN `Reason` VARCHAR(150)  NULL ;
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="119">
+        <Author>陈敬男</Author>
+        <Memo>
+            restaurant_commission表添加字段
+        </Memo>
+        <Sql>
+           ALTER TABLE `restaurant_commission` ADD COLUMN `FoodCategoryCount` INT  null DEFAULT 0;
+ALTER TABLE `restaurant_commission` ADD COLUMN `FoodCount` INT  NULL DEFAULT 0;
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="120">
+        <Author>陈敬男</Author>
+        <Memo>
+            saletransmemo表添加字段
+        </Memo>
+        <Sql>
+          ALTER TABLE `saletransmemo`
+	ADD COLUMN `TransTime` DATETIME NOT NULL;
+        </Sql>
+    </UpgradeSql>
+	<UpgradeSql version="121">
+        <Author>李晓静</Author>
+        <Memo>
+            增加实收金额字段
+        </Memo>
+        <Sql>
+          alter table gatheringinfo
+			add column ActualReceiveMoney decimal(10,2) default 0 comment '实收金额';
+        </Sql>
+    </UpgradeSql>
+    <UpgradeSql version="122">
+        <Author>陈敬男</Author>
+        <Memo>
+            修改字段可空
+        </Memo>
+        <Sql>
+          ALTER TABLE `saletransmemo`
+	ALTER `FromDepartmentId` DROP DEFAULT,
+	ALTER `FromDepartmentName` DROP DEFAULT;
+ALTER TABLE `saletransmemo`
+	CHANGE COLUMN `FromDepartmentId` `FromDepartmentId` INT(11) NULL,
+	CHANGE COLUMN `FromDepartmentName` `FromDepartmentName` VARCHAR(150) NULL ;
+        </Sql>
+    </UpgradeSql>
+     <UpgradeSql version="123">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+         ALTER TABLE `restaurant`
+	ADD COLUMN `IsClosed` BIT NULL DEFAULT b'0' COMMENT '餐厅状态 1为关闭';
+        </Sql>
+    </UpgradeSql>
+     <UpgradeSql version="124">
+        <Author>李晓静</Author>
+        <Memo>
+            全部订单表
+        </Memo>
+        <Sql>
+         CREATE TABLE `OrderAll` (
+            `OrderId` bigint NOT NULL,
+            `Code` varchar(9) NULL,
+            `OrderDate` datetime NOT NULL,
+            `PayStatus` tinyint NOT NULL DEFAULT 0,
+            `BusinessStatus` tinyint NOT NULL DEFAULT 0,
+            `PayType` tinyint NOT NULL DEFAULT 0,
+            `RefundStatus` tinyint NOT NULL DEFAULT 0,
+            `RestauarntId` int NOT NULL,
+            `OrderSource` tinyint NOT NULL,
+            `OrderType` tinyint NOT NULL,
+            PRIMARY KEY (`OrderId`) ,
+            INDEX `orderplus_restaurantid` (`RestauarntId`),
+            INDEX `orderplus_ordersource` (`OrderSource`)
+        );
+        </Sql>
+    </UpgradeSql>
+      <UpgradeSql version="125">
+        <Author>陈敬男</Author>
+        <Memo>
+            修改food字段
+        </Memo>
+        <Sql>
+        ALTER TABLE `food`
+	CHANGE COLUMN `FoodCoverPicUrl` `FoodCoverPicUrl` VARCHAR(250) NOT NULL COMMENT '菜品封面图URL';
+        </Sql>
+    </UpgradeSql>
+      <UpgradeSql version="126">
+        <Author>陈敬男</Author>
+        <Memo>
+            添加字段
+        </Memo>
+        <Sql>
+         ALTER TABLE `restaurant_commission`
+	ADD COLUMN `IsClosed` BIT NULL DEFAULT b'0' COMMENT '餐厅状态 1为关闭';
+        </Sql>
+    </UpgradeSql>
+</DBUpgrade>
